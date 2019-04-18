@@ -1,7 +1,7 @@
-package CheatGame;
+package cheatgame;
 
 public enum Value {
-	ONE,
+	ACE,
 	TWO,
 	THREE,
 	FOUR,

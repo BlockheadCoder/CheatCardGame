@@ -1,4 +1,4 @@
-package CheatGame;
+package cheatgame;
 
 public enum Suit {
 	DIAMONDS,

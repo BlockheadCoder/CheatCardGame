@@ -3,7 +3,10 @@
  * Students can modify and extend to implement their game.
  * Add your name as a modifier and the date!
  */
-package ca.sheridancollege.project;
+package cheatgame.card;
+
+import cheatgame.Suit;
+import cheatgame.Value;
 
 /**
  * A class to be used as the base Card class for the project. Must be general
@@ -19,7 +22,17 @@ public abstract class Card
      * Students should implement this method for their specific children classes 
      * @return a String representation of a card. Could be an UNO card, a regular playing card etc.
      */
+   
+   final Suit SUIT;
+   final Value VALUE;
     
+   public Card(Suit suit, Value value){
+      this.SUIT = suit;
+      this.VALUE = value;
+   }
+   
+   public abstract boolean isSuitAndValue(Suit suit, Value value);
+   
     @Override
     public abstract String toString();
     
