@@ -17,7 +17,9 @@ public class Logic {
    private GroupOfCards currentHand;
    private ArrayList<GroupOfCards> otherHands;
 
-   private Player currentPlayer;
+   private int valueOn = 0;
+   
+   private CheatPlayer currentPlayer;
    private ArrayList<CheatPlayer> players;
 
    private Pane rootPane;
@@ -134,12 +136,44 @@ public class Logic {
          middleStack.moveTo(players.get(i).getHand(), 1);
       }
       
-      
-      
-      otherHands.get(0).moveAllTo(currentHand);
+      currentPlayer = players.get(0);
+      currentPlayer.getHand().moveAllTo(currentHand);
       currentHand.flip(true);
       currentHand.refreshScreen();
-      ui.changeWhosTurnItIs(players.get(0).getPlayerID(), Value.ACE);
+      ui.changeWhosTurnItIs(players.get(0).getPlayerID(), Value.values()[valueOn]);
+      valueOn+=1;
+   }
+   
+   public void nextTurn(){
+      int ind = players.indexOf(currentPlayer);
+      currentHand.flip(false);
+      currentHand.moveAllTo(players.get(ind).getHand());
+      
+      if(ind == players.size() - 1){
+         ind = -1;
+      }
+      currentPlayer = players.get(ind+1);
+      
+      currentPlayer.getHand().moveAllTo(currentHand);
+      
+            currentHand.flip(true);
+      currentHand.refreshScreen();
+      
+      
+      
+      ui.changeWhosTurnItIs(currentPlayer.getPlayerID(), Value.values()[valueOn]);
+      
+      if(valueOn == Value.values().length-1){
+         valueOn = 0;
+      }else{
+         valueOn+=1;
+      }
+      
+      
+   }
+   
+   public void cheatCalled(){
+      
    }
 
 }

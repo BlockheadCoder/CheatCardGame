@@ -112,6 +112,10 @@ public class CheatGame extends Application {
       rootPane.getChildren().addAll(nextTurn,cheat);
       Logic l = new Logic(this, rootPane, pl);
       l.start();
+      
+      nextTurn.setOnAction(ev -> {
+         l.nextTurn();
+      });
    }
    
    public void changeWhosTurnItIs(String name, Value playing){
