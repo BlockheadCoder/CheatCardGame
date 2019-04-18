@@ -1,20 +1,17 @@
 package CheatGame;
 
+import javafx.application.Application;
+
 public class Logic {
 
-	public void startGame() {
-		// TODO - implement Logic.startGame
-		throw new UnsupportedOperationException();
-	}
+   private PlayerUI ui;
 
-	public void startUI() {
-		// TODO - implement Logic.startUI
-		throw new UnsupportedOperationException();
-	}
+   Logic(PlayerUI ui) {
+      this.ui = ui;
+   }
 
-	public void main() {
-		// TODO - implement Logic.main
-		throw new UnsupportedOperationException();
-	}
+   public void start(){
+      
+   }
 
 }
