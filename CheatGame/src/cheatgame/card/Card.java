@@ -31,7 +31,14 @@ public abstract class Card
       this.VALUE = value;
    }
    
-   public abstract boolean isSuitAndValue(Suit suit, Value value);
+   public Suit getSuit(){
+       return SUIT;
+   }
+   public Value getValue(){
+       return VALUE;
+   }
+   
+   public abstract boolean isValue(Value value);
    
     @Override
     public abstract String toString();

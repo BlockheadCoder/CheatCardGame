@@ -21,6 +21,8 @@ public class Logic {
     private ArrayList<GroupOfCards> otherHands;
 
     private int valueOn = 0;
+    private int oldValue = 0;
+
 
     private CheatPlayer currentPlayer;
     private CheatPlayer lastPlayer;
@@ -173,7 +175,7 @@ public class Logic {
         currentHand.flip(true);
         currentHand.refreshScreen();
         
-        int oldValue = valueOn;
+        oldValue = valueOn;
         if (valueOn == Value.values().length - 1) {
             valueOn = 0;
         } else {
@@ -200,11 +202,28 @@ public class Logic {
             return true;
         }
         return false;
-        
     }
 
     public void cheatCalled() {
-
+        boolean isCheating = false;
+        for(GUICard c : lastPlayer.getPlayed()){
+            if(!c.isValue(Value.values()[oldValue])){
+                isCheating = true;
+                break;
+            }
+        }
+        
+        if(isCheating){
+            middleStack.moveAllTo(lastPlayer.getHand());
+            lastPlayer.getHand().refreshScreen();
+            middleStack.refreshScreen();
+        }else{
+            middleStack.moveAllTo(currentHand);
+            currentHand.flip(true);
+            currentHand.refreshScreen();
+            middleStack.refreshScreen();
+            
+        }
     }
 
 }

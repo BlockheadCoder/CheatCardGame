@@ -17,51 +17,64 @@ import javafx.scene.image.ImageView;
  */
 public abstract class GUICard extends Card {
 
-   boolean frontFacing = false;
-   ImageView toBeShown;
-   final ImageView frontFace;
-   final ImageView backFace;
-   boolean activated;
+    boolean frontFacing = false;
+    ImageView toBeShown;
+    final ImageView frontFace;
+    final ImageView backFace;
+    boolean activated;
 
-   public GUICard(Image frontFace, Image backFace, Suit suit, Value value) {
-      super(suit, value);
-      this.frontFace = new ImageView(frontFace);
-      this.backFace = new ImageView(backFace);
-      this.toBeShown = this.backFace;
+    public GUICard(Image frontFace, Image backFace, Suit suit, Value value) {
+        super(suit, value);
+        this.frontFace = new ImageView(frontFace);
+        this.backFace = new ImageView(backFace);
+        this.toBeShown = this.backFace;
 
-      this.frontFace.setOnMousePressed(e -> {
-         onMousePressed();
-      });
-   }
+        this.frontFace.setOnMousePressed(e -> {
+            onMousePressed();
+        });
+    }
 
-   @Override
-   public boolean isSuitAndValue(Suit suit, Value value) {
-      return (suit == this.SUIT && value == this.VALUE);
-   }
+    public boolean isSuitAndValue(Suit suit, Value value) {
+        return (suit == this.SUIT && value == this.VALUE);
+    }
 
-   public ImageView getImageView() {
-      return toBeShown;
-   }
+    @Override
+    public boolean isValue(Value value) {
+        return (value == this.VALUE);
+    }
 
-   public void flip(boolean frontFacing) {
-      this.frontFacing = frontFacing;
+    public ImageView getImageView() {
+        return toBeShown;
+    }
 
-      if (frontFacing) {
-         toBeShown = frontFace;
-      } else {
-         toBeShown = backFace;
-      }
-   }
+    public boolean isActivated() {
+        return activated;
+    }
 
-   public void flip() {
-      frontFacing = !frontFacing;
-      if (frontFacing) {
-         toBeShown = frontFace;
-      } else {
-         toBeShown = backFace;
-      }
-   }
-   
-   public abstract void onMousePressed();
+    public void flip(boolean frontFacing) {
+
+        if (this.frontFacing != frontFacing) {
+            flip();
+        }
+    }
+
+    public void flip() {
+
+        activated = false;
+        frontFacing = !frontFacing;
+        if (frontFacing) {
+
+            toBeShown = frontFace;
+
+            backFace.setOpacity(0);
+        } else {
+            toBeShown = backFace;
+            frontFace.setOpacity(0);
+        }
+
+        toBeShown.setOpacity(1);
+    }
+
+    public abstract void onMousePressed();
 
 }
