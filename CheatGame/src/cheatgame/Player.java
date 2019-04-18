@@ -8,6 +8,7 @@ package cheatgame;
 /**
  * A class that models each Player in the game. Players have an identifier, which should be unique.
  * @author dancye, 2018
+ * @modified thomas chapman 2019
  */
 public abstract class Player 
 {

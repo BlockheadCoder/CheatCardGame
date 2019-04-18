@@ -12,17 +12,27 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
+ * GUICard for cards with images
  *
  * @author thomas
  */
 public abstract class GUICard extends Card {
 
+    //Variables used throughout
     boolean frontFacing = false;
     ImageView toBeShown;
     final ImageView frontFace;
     final ImageView backFace;
     boolean activated;
 
+    /**
+     * Constructor
+     *
+     * @param frontFace Image for front face
+     * @param backFace Image for back face
+     * @param suit
+     * @param value
+     */
     public GUICard(Image frontFace, Image backFace, Suit suit, Value value) {
         super(suit, value);
         this.frontFace = new ImageView(frontFace);
@@ -34,23 +44,51 @@ public abstract class GUICard extends Card {
         });
     }
 
+    /**
+     * Checks against both suit and value
+     *
+     * @param suit
+     * @param value
+     * @return returns true if there is a match.
+     */
     public boolean isSuitAndValue(Suit suit, Value value) {
         return (suit == this.SUIT && value == this.VALUE);
     }
 
+    /**
+     * Checks against the value only
+     *
+     * @param value
+     * @return true if the value is a match
+     */
     @Override
     public boolean isValue(Value value) {
         return (value == this.VALUE);
     }
 
+    /**
+     *Get the image view of the card
+     * 
+     * @return imageView of side of card to be shown
+     */
     public ImageView getImageView() {
         return toBeShown;
     }
 
+    /**
+     * If the card is activated from user selection
+     * 
+     * @return 
+     */
     public boolean isActivated() {
         return activated;
     }
 
+    /**
+     * Flip card depending on the boolean
+     * 
+     * @param frontFacing boolean
+     */
     public void flip(boolean frontFacing) {
 
         if (this.frontFacing != frontFacing) {
@@ -58,6 +96,9 @@ public abstract class GUICard extends Card {
         }
     }
 
+    /**
+     * Sets the toBeShown imageview to the back or front.
+     */
     public void flip() {
 
         activated = false;

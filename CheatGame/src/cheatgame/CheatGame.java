@@ -13,6 +13,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/**
+ * Start class with the main method.
+ * 
+ * @author Thomas Chapman 2019
+ */
 public class CheatGame extends Application {
 
     private Label whosTurnIsIt;
@@ -23,24 +28,33 @@ public class CheatGame extends Application {
         launch(args);
     }
 
+    /**
+     * Starts up and sets the UI for the entire game
+     * 
+     * @param primaryStage
+     * @throws Exception 
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         rootPane = new AnchorPane();
 
         rootPane.setStyle("-fx-background-color: #6f9779;");
-
+        
+        //Set primary stage size and scene
         primaryStage.setScene(new Scene(rootPane));
-
         primaryStage.setMinWidth(50);
         primaryStage.setMinHeight(50);
         primaryStage.setWidth(800);
         primaryStage.setHeight(800);
+        
+        //Keep the root pane sized with the window
         rootPane.prefWidthProperty().bind(primaryStage.widthProperty());
         rootPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
         primaryStage.show();
-
+        
+        
         whosTurnIsIt = new Label();
         lastPlay = new Label("");
         
@@ -55,6 +69,8 @@ public class CheatGame extends Application {
         whosTurnIsIt.setLayoutY(
                 (rootPane.heightProperty().get() / 2) + 150);
 
+        
+        //Get number of players
         TextInputDialog getNumberOfPlayers = new TextInputDialog("4");
 
         getNumberOfPlayers.setTitle("How many players are there?");
@@ -62,6 +78,8 @@ public class CheatGame extends Application {
 
         int numberOfPlayers = -1;
 
+        
+        //Checks that the number of players entered is viable
         while (numberOfPlayers == -1) {
             Optional<String> result = getNumberOfPlayers.showAndWait();
             if (result.isPresent()) {
@@ -82,6 +100,7 @@ public class CheatGame extends Application {
 
         ArrayList<CheatPlayer> pl = new ArrayList();
 
+        //Get the name for each player
         for (int i = 0; i < numberOfPlayers; i++) {
             TextInputDialog getPlayerName = new TextInputDialog();
             getPlayerName.setHeaderText("Enter your name player: " + (i + 1));
@@ -98,6 +117,8 @@ public class CheatGame extends Application {
             pl.add(new CheatPlayer(playerName));
         }
 
+        
+        //More controls setting positions and settings
         Button nextTurn = new Button("Play");
         Button cheat = new Button("CHEAT!");
 
@@ -114,9 +135,13 @@ public class CheatGame extends Application {
         cheat.setFont(Font.font(20));
 
         rootPane.getChildren().addAll(nextTurn, cheat, lastPlay);
+        
+        //Logic class deals with all the logic of the game
         Logic l = new Logic(this, rootPane, pl);
         l.start();
-
+        
+        
+        //Set action events for the buttons
         nextTurn.setOnAction(ev -> {
             l.nextTurn();
         });
@@ -126,6 +151,15 @@ public class CheatGame extends Application {
         });
     }
 
+    /**
+     * Changes the different labels during the game. Called from the logic class
+     * 
+     * @param name Current player
+     * @param playing Current value
+     * @param lastPlayerName last player
+     * @param numPlayed Number of cards played
+     * @param lastPlayed Last value
+     */
     public void changeWhosTurnItIs(String name, Value playing,
             String lastPlayerName, int numPlayed, Value lastPlayed) {
 

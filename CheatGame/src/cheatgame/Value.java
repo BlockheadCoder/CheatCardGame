@@ -1,5 +1,9 @@
 package cheatgame;
 
+/**
+ * Value enum
+ * @author Thomas Chapman
+ */
 public enum Value {
 	ACE,
 	TWO,

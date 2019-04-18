@@ -5,12 +5,10 @@
  */
 package cheatgame;
 
-import cheatgame.card.CheatCard;
 import cheatgame.card.Card;
 import cheatgame.card.GUICard;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -22,6 +20,7 @@ import javafx.scene.text.Font;
  *
  * @author dancye
  * @modified Thomas Chapman April 18 2019
+ *
  */
 public class GroupOfCards {
 
@@ -37,7 +36,18 @@ public class GroupOfCards {
     private final double spaceBetweenCards;
     Pane rootPane;
 
-    public GroupOfCards(Pane rootPane, double x, double y, 
+    /**
+     * Constructor for GroupOfCards
+     *
+     *
+     * @param rootPane Parent pane for all the ImageViews
+     * @param x X position of the hand on the pane
+     * @param y Y position of the hand on the pane
+     * @param spaceBetweenCards Distance between cards
+     * @param disableLabel Certain groups of cards need the label disabled
+     * @param shouldSort Certain groups of cards need their cards sorted
+     */
+    public GroupOfCards(Pane rootPane, double x, double y,
             double spaceBetweenCards, boolean disableLabel, boolean shouldSort) {
         this.rootPane = rootPane;
         this.xPos = x;
@@ -60,27 +70,44 @@ public class GroupOfCards {
         }
         this.shouldSort = shouldSort;
     }
-
+    
+    /**
+     * Adds card to the hand
+     * 
+     * @param card card to be added
+     */
     public void addCard(GUICard card) {
-//      System.out.println("MyX POS IS : "+this.xPos);
         cards.add(card);
         refreshScreen();
     }
 
+    /**
+     * Sets the name of the hold for the label
+     * @param name 
+     */
     public void setName(String name) {
         nameLabel.setText(name);
     }
     
-
+    /**
+     * Calls the correct methods to refresh the gui elements
+     */
     public void refreshScreen() {
-        if(shouldSort){
-             sort();
+        if (shouldSort) {
+            sort();
         }
-       
+
         drawCardsOnPane();
         updateLabel();
     }
 
+    /**
+     * Remove specific card from the Group
+     * 
+     * @param suit Suit to match
+     * @param value Value to match
+     * @return Card that was removed
+     */
     public Card removeCard(Suit suit, Value value) {
         for (GUICard c : cards) {
             if (c.isSuitAndValue(suit, value)) {
@@ -93,6 +120,11 @@ public class GroupOfCards {
         return null;
     }
 
+    /**
+     * Moves all cards in this group to GOC
+     * 
+     * @param goc Target group
+     */
     public void moveAllTo(GroupOfCards goc) {
         int size = cards.size();
         for (int i = 0; i < size; i++) {
@@ -100,15 +132,18 @@ public class GroupOfCards {
             goc.addCard(cards.get(0));
             cards.remove(cards.get(0));
         }
-
-        for (GUICard c : goc.cards) {
-
-        }
+        //Refresh specific elements of the GUI for both groups
         goc.drawCardsOnPane();
         drawCardsOnPane();
 //      refreshScreen();
     }
 
+    /**
+     * Move specific cards to another group
+     * 
+     * @param goc target
+     * @param cardsToBeMoved GUICards to be moved
+     */
     public void moveTo(GroupOfCards goc, ArrayList<GUICard> cardsToBeMoved) {
         for (GUICard c : cardsToBeMoved) {
             goc.addCard(c);
@@ -119,17 +154,22 @@ public class GroupOfCards {
         goc.refreshScreen();
     }
 
+    /**
+     * Moves first X elements out of this group into GOC
+     * @param goc target Group
+     * @param x number of cards to move
+     */
     public void moveTo(GroupOfCards goc, int x) {
         for (int i = 0; i < x; i++) {
-//         if(cards.isEmpty()){
-//            return;
-//         }
             goc.addCard(cards.get(0));
             cards.remove(0);
             refreshScreen();
         }
     }
 
+    /**
+     * Updates labels text
+     */
     public void updateLabel() {
         if (!disableLabel) {
             numOfCards.setText("x" + cards.size());
@@ -137,8 +177,6 @@ public class GroupOfCards {
             numOfCards.toFront();
 
             nameLabel.toFront();
-
-//         System.out.println("Labels");
         }
     }
 
@@ -150,25 +188,28 @@ public class GroupOfCards {
     public ArrayList<GUICard> showCards() {
         return cards;
     }
-    
-    public void sort(){
+
+    /**
+     * Sorts the current group of cards and refreshes GUI
+     */
+    public void sort() {
         this.cards.sort((GUICard o1, GUICard o2) -> (o1.getValue().compareTo(o2.getValue())));
         drawCardsOnPane();
     }
 
+    /**
+     * Moves and aligns each card in this group to where they are supposed to be.
+     */
     public void drawCardsOnPane() {
-
         
-        
-//      System.out.println("Removed: "+rootPane.getChildren().removeAll(cards));
+        //Delete all old cards on the rootPane
         cards.forEach((c) -> {
             rootPane.getChildren().remove(c.getImageView());
         });
 
-//      int forLimit = (getSize() < 10 ? getSize() : 10);
         int forLimit = getSize();
 
-//      System.out.println(rootPane.getWidth());
+        //Add imageView again. Redraw because each card may be flipped, meaning a new image view
         for (int i = 0; i < forLimit; i++) {
             rootPane.getChildren().add(cards.get(i).getImageView());
 
@@ -181,6 +222,7 @@ public class GroupOfCards {
                     yPos - cards.get(i).getImageView().getImage().getHeight() / 2);
         }
 
+        
         if (!disableLabel) {
             if (!rootPane.getChildren().contains(numOfCards)) {
                 rootPane.getChildren().add(numOfCards);
@@ -192,13 +234,21 @@ public class GroupOfCards {
         }
     }
 
-    public void flip(boolean flipped) {
+    /**
+     * Flips all cards from front to back
+     * 
+     * @param frontFacing if false then flip to back
+     */
+    public void flip(boolean frontFacing) {
         for (GUICard c : cards) {
             System.out.println("Flipping " + c);
-            c.flip(flipped);
+            c.flip(frontFacing);
         }
     }
 
+    /**
+     * Shuffles group of cards
+     */
     public void shuffle() {
         Collections.shuffle(cards);
     }
@@ -210,26 +260,6 @@ public class GroupOfCards {
         return cards.size();
     }
 
-    /**
-     * @return the xPos
-     */
-    public double getxPos() {
-        return xPos;
-    }
-
-    /**
-     * @return the yPos
-     */
-    public double getyPos() {
-        return yPos;
-    }
-
-    public void setxPos(int pos) {
-        xPos = pos;
-    }
-
-    public void setyPos(int pos) {
-        yPos = pos;
-    }
+    
 
 }
